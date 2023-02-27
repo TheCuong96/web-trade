@@ -13,7 +13,7 @@ export default function Login() {
   })
 
   return (
-    <div className='bg-orange'>
+    <div className='bg-skyblue'>
       <div className='mx-auto max-w-7xl px-4'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
@@ -30,7 +30,7 @@ export default function Login() {
                   placeholder='Email'
                   autoComplete='on'
                 />
-                <div className='mt-1 min-h-[1rem] text-sm text-red-600'></div>
+                <div className='mt-1 min-h-[1rem] text-sm text-sky-600'></div>
               </div>
               <div className='mt-3'>
                 <input
@@ -39,15 +39,21 @@ export default function Login() {
                   className='w-full rounded-sm border border-gray-300 p-3 outline-none focus:border-gray-500 focus:shadow-sm'
                   placeholder='Password'
                 />
-                <div className='mt-1 min-h-[1rem] text-sm text-red-600'></div>
+                <div className='mt-1 min-h-[1rem] text-sm text-sky-600'></div>
               </div>
               <div className='mt-3'>
                 <button
                   type='submit'
-                  className='w-full bg-sky-600 py-4 px-2 text-center text-sm uppercase text-white hover:bg-red-600'
+                  className='w-full bg-sky-600 py-4 px-2 text-center text-sm uppercase text-white hover:bg-sky-600'
                 >
                   Đăng nhập
                 </button>
+              </div>
+              <div className='mt-8 flex items-center justify-center'>
+                <span className='text-gray-400'>Bạn chưa có tài khoản?</span>
+                <Link className='ml-1 text-sky-400' to='/register'>
+                  Đăng ký
+                </Link>
               </div>
             </form>
           </div>

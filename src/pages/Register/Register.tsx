@@ -32,7 +32,7 @@ export default function Register() {
   // console.log(email)
 
   return (
-    <div className='bg-orange'>
+    <div className='bg-skyblue'>
       <div className='mx-auto max-w-7xl px-4'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
@@ -80,13 +80,13 @@ export default function Register() {
                 </div>
               </div>
               <div className='mt-2'>
-                <button className='w-full bg-red-500 py-4 px-2 text-center text-sm uppercase text-white hover:bg-red-600'>
+                <button className='w-full bg-sky-500 py-4 px-2 text-center text-sm uppercase text-white hover:bg-sky-600'>
                   Đăng ký
                 </button>
               </div>
               <div className='mt-8 flex items-center justify-center'>
                 <span className='text-gray-400'>Bạn đã có tài khoản?</span>
-                <Link className='ml-1 text-red-400' to='/login'>
+                <Link className='ml-1 text-sky-400' to='/login'>
                   Đăng nhập
                 </Link>
               </div>
