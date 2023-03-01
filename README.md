@@ -314,3 +314,8 @@ Các bạn thêm đoạn code này vào `settings.json` của VS Code
   "tailwindCSS.experimental.classRegex": ["[a-zA-Z]*class[a-zA-Z]*='([^']+)'"]
 }
 ```
+
+## Các web framework hỗ trợ trong dự án
+
+[https://floating-ui.com/docs/react]
+[https://www.framer.com/motion/introduction/]
