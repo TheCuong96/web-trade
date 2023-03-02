@@ -133,7 +133,7 @@ export default function Header() {
             <img
               src={shoppingLogo}
               alt='shoppingLogo'
-              className='mx-5 h-8 h-11 fill-skyblue fill-white lg:h-11'
+              className='h-11 w-full fill-white'
             />
           </Link>
           <form className='col-span-9'>
