@@ -2,17 +2,20 @@ import axios, { AxiosError, type AxiosInstance } from 'axios'
 import HttpStatusCode from 'src/constants/httpStatusCode.enum'
 import { toast } from 'react-toastify'
 import {
-  getAccessTokenToLS,
-  removeAccessTokenToLS,
-  saveAccessTokenToLS
+  clearLS,
+  setAccessTokenToLS,
+  setProfileToLS,
+  getAccessTokenFromLS
 } from './auth'
 import { error } from 'console'
+import path from 'src/constants/path'
+import { AuthResponse } from 'src/types/auth.type'
 
 class Http {
   instance: AxiosInstance
   private accessToken: string // ta tạo 1 biến accessToken trong class trước
   constructor() {
-    this.accessToken = getAccessTokenToLS() // lấy access_token từ localStorage để lưu vào biến ở đây, câu hỏi là tại sao làm vậy, làm vậy vì this.accessToken là lưu trên ram còn getAccessTokenToLS() là lưu trên ổ cứng của ta, nên mỗi khi ta reload lại page hay cần dùng tới accessToken thì ta chỉ cần lấy trong class từ ra ram ra thì nó sẽ nhanh hơn lấy từ ổ cứng rất nhiều
+    this.accessToken = getAccessTokenFromLS() // lấy access_token từ localStorage để lưu vào biến ở đây, câu hỏi là tại sao làm vậy, làm vậy vì this.accessToken là lưu trên ram còn getAccessTokenToLS() là lưu trên ổ cứng của ta, nên mỗi khi ta reload lại page hay cần dùng tới accessToken thì ta chỉ cần lấy trong class từ ra ram ra thì nó sẽ nhanh hơn lấy từ ổ cứng rất nhiều
     this.instance = axios.create({
       baseURL: 'https://api-ecom.duthanhduoc.com/',
       timeout: 10000,
@@ -38,12 +41,14 @@ class Http {
       console.log('response', response)
       // khi đăng nhập hoặc đăng ký thành công thì api trả về cho ta access_token và url, lấy url ra để kiểm tra xem là gì, nếu là login hoặc register thì set access_token vào localStorage và accessToken ở
       const { url } = response.config
-      if (url === '/login' || url === '/register') {
-        this.accessToken = response.data.data.access_token // vì ở trên ta tạo ra accessToken nên ta lưu vào đây trước
-        saveAccessTokenToLS(this.accessToken)
-      } else if (url === '/logout') {
+      if (url === path.login || url === path.register) {
+        const data = response.data as AuthResponse
+        this.accessToken = data.data.access_token // vì ở trên ta tạo ra accessToken nên ta lưu vào đây trước
+        setAccessTokenToLS(this.accessToken)
+        setProfileToLS(data.data.user)
+      } else if (url === path.logout) {
         this.accessToken = ''
-        removeAccessTokenToLS()
+        clearLS()
       }
       return response
     }),

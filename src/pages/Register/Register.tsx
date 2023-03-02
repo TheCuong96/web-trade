@@ -16,7 +16,7 @@ import Button from 'src/components/Button'
 type FormData = Schema
 
 export default function Register() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
   const {
     register,
@@ -38,6 +38,7 @@ export default function Register() {
         toast.success(data.data.message)
         setIsAuthenticated(true)
         navigate('/')
+        setProfile(data.data.data.user)
       },
       onError: (error) => {
         if (

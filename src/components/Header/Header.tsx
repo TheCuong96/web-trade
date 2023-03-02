@@ -6,9 +6,11 @@ import { logout } from 'src/apis/auth.api'
 import { toast } from 'react-toastify'
 import { AppContext } from 'src/context/App.context'
 import { useContext } from 'react'
+import path from 'src/constants/path'
 
 export default function Header() {
-  const { isAuthenticated, setIsAuthenticated } = useContext(AppContext)
+  const { isAuthenticated, setIsAuthenticated, setProfile, profile } =
+    useContext(AppContext)
   const navigate = useNavigate()
   const logoutMutation = useMutation({
     mutationFn: logout,
@@ -16,6 +18,7 @@ export default function Header() {
       toast.success(data.data.message)
       setIsAuthenticated(false)
       navigate('/')
+      setProfile(null)
     }
   })
 
@@ -104,19 +107,22 @@ export default function Header() {
                   className='h-full w-full rounded-full object-cover'
                 />
               </div>
-              <div>phanthecuong</div>
+              <div>{profile?.email}</div>
             </Popover>
           )}
           {!isAuthenticated && (
             <div className='flex items-center'>
               <Link
-                to='/register'
+                to={path.register}
                 className='mx-3 capitalize hover:text-white/70'
               >
                 Đăng ký
               </Link>
               <div className='h-4 border-r-[1px] border-r-white/40' />
-              <Link to='/login' className='mx-3 capitalize hover:text-white/70'>
+              <Link
+                to={path.login}
+                className='mx-3 capitalize hover:text-white/70'
+              >
                 Đăng nhập
               </Link>
             </div>
