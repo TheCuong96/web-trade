@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import shoppingLogo from '../../assets/shopping.svg'
 import Popover from '../Popover'
 import { useMutation } from '@tanstack/react-query'
-import { logout } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import { toast } from 'react-toastify'
 import { AppContext } from 'src/context/App.context'
 import { useContext } from 'react'
@@ -13,7 +13,7 @@ export default function Header() {
     useContext(AppContext)
   const navigate = useNavigate()
   const logoutMutation = useMutation({
-    mutationFn: logout,
+    mutationFn: authApi.logout,
     onSuccess(data) {
       toast.success(data.data.message)
       setIsAuthenticated(false)
