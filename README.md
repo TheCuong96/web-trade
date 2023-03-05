@@ -319,3 +319,4 @@ Các bạn thêm đoạn code này vào `settings.json` của VS Code
 
 [https://floating-ui.com/docs/react]
 [https://www.framer.com/motion/introduction/]
+[dùng để ngăn chặn tấn công bằng xss bằng html](https://www.npmjs.com/package/dompurify)
