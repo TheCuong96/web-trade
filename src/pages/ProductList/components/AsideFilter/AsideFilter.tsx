@@ -4,7 +4,6 @@ import Button from 'src/components/Button'
 import Input from 'src/components/Input'
 import path from 'src/constants/path'
 import { Category } from 'src/types/category.type'
-import { QueryConfig } from '../ProductList'
 import { schema, Schema } from 'src/utils/rules'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -12,6 +11,7 @@ import InputNumber from 'src/components/InputNumber'
 import { NoUndefinedField } from 'src/types/utils.type'
 import RatingStars from 'src/components/RatingStars'
 import { omit } from 'lodash'
+import { QueryConfig } from '../../ProductList'
 
 interface Props {
   queryConfig: QueryConfig
