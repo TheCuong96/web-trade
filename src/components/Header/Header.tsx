@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, createSearchParams, useNavigate } from 'react-router-dom'
 import shoppingLogo from '../../assets/shopping.svg'
 import Popover from '../Popover'
 import { useMutation } from '@tanstack/react-query'
@@ -7,8 +7,24 @@ import { toast } from 'react-toastify'
 import { AppContext } from 'src/context/App.context'
 import { useContext } from 'react'
 import path from 'src/constants/path'
+import useQueryConfig from 'src/hooks/useQueryConfig'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+import { Schema, schema } from 'src/utils/rules'
+import { omit } from 'lodash'
+
+type FormData = Pick<Schema, 'name'>
+
+const nameSchema = schema.pick(['name'])
 
 export default function Header() {
+  const queryConfig = useQueryConfig()
+  const { register, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      name: ''
+    },
+    resolver: yupResolver(nameSchema)
+  })
   const { isAuthenticated, setIsAuthenticated, setProfile, profile } =
     useContext(AppContext)
   const navigate = useNavigate()
@@ -25,6 +41,26 @@ export default function Header() {
   const handleLogout = () => {
     logoutMutation.mutate()
   }
+  console.log('queryConfig.order', queryConfig.order)
+
+  const onSubmitSearch = handleSubmit((data) => {
+    const config = queryConfig.order
+      ? omit(
+          {
+            ...queryConfig,
+            name: data.name
+          },
+          ['order', 'sort_by']
+        )
+      : {
+          ...queryConfig,
+          name: data.name
+        }
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(config).toString()
+    })
+  })
   return (
     <div className='bg-[linear-gradient(-180deg,skyblue,skyblue)] pb-5 pt-2 text-white'>
       <div className='container'>
@@ -34,10 +70,10 @@ export default function Header() {
             renderPopover={
               <div className='relative rounded-sm border border-gray-200 bg-white shadow-md'>
                 <div className='flex flex-col py-2 pr-28 pl-3'>
-                  <button className='hover:text-orange py-2 px-3'>
+                  <button className='py-2 px-3 hover:text-skyblue'>
                     Tiếng Việt
                   </button>
-                  <button className='hover:text-orange mt-2 py-2 px-3'>
+                  <button className='mt-2 py-2 px-3 hover:text-skyblue'>
                     English
                   </button>
                 </div>
@@ -136,15 +172,15 @@ export default function Header() {
               className='h-11 w-full fill-white'
             />
           </Link>
-          <form className='col-span-9'>
+          <form className='col-span-9' onSubmit={onSubmitSearch}>
             <div className='flex rounded-sm bg-white p-1'>
               <input
                 type='text'
-                name='search'
+                {...register('name')}
                 className='flex-grow border-none bg-transparent px-3 py-2 text-black outline-none'
                 placeholder='Free Ship Đơn Từ 0Đ'
               />
-              <button className='bg-orange flex-shrink-0 rounded-sm py-2 px-6 hover:opacity-90'>
+              <button className='flex-shrink-0 rounded-sm bg-skyblue py-2 px-6 hover:opacity-90'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -186,7 +222,7 @@ export default function Header() {
                           </div>
                         </div>
                         <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫469.000</span>
+                          <span className='text-skyblue'>₫469.000</span>
                         </div>
                       </div>
                       <div className='mt-4 flex'>
@@ -204,7 +240,7 @@ export default function Header() {
                           </div>
                         </div>
                         <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫469.000</span>
+                          <span className='text-skyblue'>₫469.000</span>
                         </div>
                       </div>
                       <div className='mt-4 flex'>
@@ -222,7 +258,7 @@ export default function Header() {
                           </div>
                         </div>
                         <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫469.000</span>
+                          <span className='text-skyblue'>₫469.000</span>
                         </div>
                       </div>
                       <div className='mt-4 flex'>
@@ -240,7 +276,7 @@ export default function Header() {
                           </div>
                         </div>
                         <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫469.000</span>
+                          <span className='text-skyblue'>₫469.000</span>
                         </div>
                       </div>
                       <div className='mt-4 flex'>
@@ -258,7 +294,7 @@ export default function Header() {
                           </div>
                         </div>
                         <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫469.000</span>
+                          <span className='text-skyblue'>₫469.000</span>
                         </div>
                       </div>
                     </div>
@@ -266,7 +302,7 @@ export default function Header() {
                       <div className='text-xs capitalize text-gray-500'>
                         Thêm hàng vào giỏ
                       </div>
-                      <button className='bg-orange rounded-sm px-4 py-2 capitalize text-white hover:bg-opacity-90'>
+                      <button className='rounded-sm bg-skyblue px-4 py-2 capitalize text-white hover:bg-opacity-90'>
                         Xem giỏ hàng
                       </button>
                     </div>
