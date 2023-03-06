@@ -28,7 +28,9 @@ export default function ProductList() {
     queryKey: ['categories'],
     queryFn: () => {
       return categoryApi.getCategories()
-    }
+    },
+    keepPreviousData: true,
+    staleTime: 3 * 60 * 1000
   })
 
   console.log(productsData)

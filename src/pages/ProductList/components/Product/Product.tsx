@@ -37,7 +37,7 @@ export default function Product({ product }: Props) {
               <span className='text-xs'>₫</span>
               <span>{formatCurrency(product.price_before_discount)}</span>
             </div>
-            <div className='text-orange ml-1 truncate'>
+            <div className='ml-1 truncate text-skyblue'>
               <span className='text-xs'>₫</span>
               <span>{formatCurrency(product.price)}</span>
             </div>
