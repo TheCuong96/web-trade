@@ -31,3 +31,19 @@ export function formatNumberToSocialStyle(value: number) {
 
 export const rateSale = (original: number, sale: number) =>
   Math.round(((original - sale) / original) * 100) + '%'
+
+const removeSpecialCharacter = (str: string) =>
+  // eslint-disable-next-line no-useless-escape, prettier/prettier
+  str.replace(
+    /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g,
+    ''
+  )
+
+export const generateNameId = ({ name, id }: { name: string; id: string }) => {
+  return removeSpecialCharacter(name).replace(/\s/g, '-') + `-id-${id}`
+}
+
+export const getIdFromNameId = (nameId: string) => {
+  const arr = nameId.split('-id-')
+  return arr[arr.length - 1]
+}
