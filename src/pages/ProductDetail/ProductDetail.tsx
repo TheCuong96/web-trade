@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -17,6 +17,10 @@ import {
 } from 'src/utils/utils'
 import Product from '../ProductList/components/Product'
 import QuantityController from 'src/components/QuantityController'
+import purchaseApi from 'src/apis/purchase.api'
+import { purchasesStatus } from 'src/constants/purchase'
+import { toast } from 'react-toastify'
+import { queryClient } from 'src/main'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
@@ -56,7 +60,7 @@ export default function ProductDetail() {
     staleTime: 3 * 60 * 1000,
     enabled: Boolean(product) // khi nào product khác null hoặc undefined thì mới gọi api
   })
-
+  const addToCartMutation = useMutation(purchaseApi.addToCart)
   console.log(productsData)
 
   const next = () => {
@@ -101,6 +105,20 @@ export default function ProductDetail() {
   }
   const handleBuyCount = (value: number) => {
     setBuyCount(value)
+  }
+  const addToCart = () => {
+    addToCartMutation.mutate(
+      { buy_count: buyCount, product_id: product?._id as string },
+      {
+        onSuccess: (data) => {
+          toast.success(data.data.message, { autoClose: 1000 })
+          queryClient.invalidateQueries({
+            //đoạn này là để khi thêm mới thành công thì cũng đồng thời fetch lại api của thằng có key là purchases
+            queryKey: ['purchases', { status: purchasesStatus.inCart }]
+          })
+        }
+      }
+    )
   }
   if (!product) return null
   return (
@@ -225,7 +243,10 @@ export default function ProductDetail() {
                 </div>
               </div>
               <div className='mt-8 flex items-center'>
-                <button className='flex h-12 items-center justify-center rounded-sm border border-skyblue bg-skyblue/10 px-5 capitalize text-skyblue shadow-sm hover:bg-skyblue/5'>
+                <button
+                  onClick={addToCart}
+                  className='flex h-12 items-center justify-center rounded-sm border border-skyblue bg-skyblue/10 px-5 capitalize text-skyblue shadow-sm hover:bg-skyblue/5'
+                >
                   <svg
                     enableBackground='new 0 0 15 15'
                     viewBox='0 0 15 15'
