@@ -34,16 +34,20 @@ export const rateSale = (original: number, sale: number) =>
 
 const removeSpecialCharacter = (str: string) =>
   // eslint-disable-next-line no-useless-escape, prettier/prettier
+  /** thay đổi những ký hiệu đặc biệt thành khoảng trống */
   str.replace(
     /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g,
     ''
   )
 
 export const generateNameId = ({ name, id }: { name: string; id: string }) => {
+  console.log('xxx', removeSpecialCharacter(name))
+  /** thay đổi những khoảng trống thành dấu '-' và ở đoạn cuối cùng gắn thêm -id- và biến {id} */
   return removeSpecialCharacter(name).replace(/\s/g, '-') + `-id-${id}`
 }
 
 export const getIdFromNameId = (nameId: string) => {
+  /** lấy id trên 1 đoạn string sau khi nhìn thấy -id- trên đoạn string đó */
   const arr = nameId.split('-id-')
   return arr[arr.length - 1]
 }
