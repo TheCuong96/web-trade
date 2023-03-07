@@ -37,16 +37,22 @@ export default function Cart() {
 
   // const handleCheck =
   //   (productIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-  //     extendedPurchases.map((item, index, arrayNew) => {
-  //       arrayNew[productIndex].checked = event.target.checked
-  //       setExtendedPurchases([...arrayNew])
+  //     const updatedPurchases = extendedPurchases.map((purchase, index) => {
+  //       if (index === productIndex) {
+  //         return {
+  //           ...purchase,
+  //           checked: event.target.checked
+  //         }
+  //       }
+  //       return purchase
   //     })
+  //     setExtendedPurchases(updatedPurchases)
   //   }
 
   const handleCheck =
     (productIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setExtendedPurchases(
-        produce((draft) => { 
+        produce((draft) => { // dùng immer sẽ nhanh và tiện hơn trong việc xử lý state để tránh bị mutate
           draft[productIndex].checked = event.target.checked
         })
       )
