@@ -263,9 +263,12 @@ export default function Header() {
                             : ''}{' '}
                           Thêm hàng vào giỏ
                         </div>
-                        <button className='rounded-sm bg-skyblue px-4 py-2 capitalize text-white hover:bg-opacity-90'>
+                        <Link
+                          to={path.cart}
+                          className='rounded-sm bg-skyblue px-4 py-2 capitalize text-white hover:bg-opacity-90'
+                        >
                           Xem giỏ hàng
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   ) : (
