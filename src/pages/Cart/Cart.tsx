@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import purchaseApi from 'src/apis/purchase.api'
 import Button from 'src/components/Button'
@@ -10,6 +10,7 @@ import { Purchase } from 'src/types/purchase.type'
 
 import produce from 'immer'
 import { useEffect, useState } from 'react'
+import { keyBy } from 'lodash'
 interface ExtendedPurchase extends Purchase {
   disabled: boolean
   checked: boolean
@@ -18,22 +19,32 @@ export default function Cart() {
   const [extendedPurchases, setExtendedPurchases] = useState<
     ExtendedPurchase[]
   >([])
-  const { data: purchasesInCartData } = useQuery({
+  const { data: purchasesInCartData, refetch } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
   })
+
+  const updatePurchaseMutation = useMutation({
+    mutationFn: purchaseApi.updatePurchase,
+    onSuccess: () => {
+      refetch() //update xong thì gọi lại api của giỏ hàng để cập nhật data và đồng thời data mới này ko có disable nên người dùng có thể nhập lại input bình thường
+    }
+  })
+
   const purchasesInCart = purchasesInCartData?.data.data
   useEffect(() => {
-    setExtendedPurchases(
-      purchasesInCart?.map((purchase) => ({
-        ...purchase,
-        disabled: false,
-        checked: false
-      })) || []
-    )
+    setExtendedPurchases((prev) => {
+      const extendedPurchasesObject = keyBy(prev, '_id') // dùng keyBy của lodash để clone hết data của giỏ hàng của mình gắn cho id của chính nó, đại khái là lưu ra 1 bản sao chép để giữ lại giá trị checked và sử dụng nó
+      return (
+        purchasesInCart?.map((purchase) => ({
+          ...purchase,
+          disabled: false,
+          checked: Boolean(extendedPurchasesObject[purchase._id]?.checked)
+        })) || []
+      )
+    })
   }, [purchasesInCart])
   const isAllChecked = extendedPurchases.every((purchase) => purchase.checked)
-  console.log('isAllChecked', isAllChecked)
 
   // const handleCheck =
   //   (productIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,10 +61,11 @@ export default function Cart() {
   //   }
 
   const handleCheck =
-    (productIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    (purchaseIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setExtendedPurchases(
-        produce((draft) => { // dùng immer sẽ nhanh và tiện hơn trong việc xử lý state để tránh bị mutate
-          draft[productIndex].checked = event.target.checked
+        produce((draft) => {
+          // dùng immer sẽ nhanh và tiện hơn trong việc xử lý state để tránh bị mutate
+          draft[purchaseIndex].checked = event.target.checked
         })
       )
     }
@@ -66,7 +78,37 @@ export default function Cart() {
       }))
     )
   }
+  const handleQuantity = (
+    purchaseIndex: number,
+    value: number,
+    enable: boolean
+  ) => {
+    // mỗi lần update số lượng thì gọi api cho nó luôn
+    console.log('enable', enable)
 
+    if (enable) {
+      console.log('tại sao ', enable, 'mà vẫn chạy vô đây')
+
+      const purchase = extendedPurchases[purchaseIndex]
+      setExtendedPurchases(
+        produce((draft) => {
+          draft[purchaseIndex].disabled = true // trong lúc update bằng chuột thì không cho người dùng nhập vào input
+        })
+      )
+      updatePurchaseMutation.mutate({
+        product_id: purchase.product._id,
+        buy_count: value
+      })
+    }
+  }
+
+  const handleTypeQuantity = (purchaseIndex: number) => (value: number) => {
+    setExtendedPurchases(
+      produce((draft) => {
+        draft[purchaseIndex].buy_count = value
+      })
+    )
+  }
   return (
     <div className='bg-neutral-100 py-16'>
       <div className='container'>
@@ -160,6 +202,29 @@ export default function Cart() {
                           max={purchase.product.quantity}
                           value={purchase.buy_count}
                           classNameWrapper='flex items-center'
+                          onIncrease={(value) =>
+                            handleQuantity(
+                              index,
+                              value,
+                              value <= purchase.product.quantity
+                            )
+                          }
+                          onDecrease={(value) =>
+                            handleQuantity(index, value, value >= 1)
+                          }
+                          disabled={purchase.disabled}
+                          onType={handleTypeQuantity(index)}
+                          onFocusOut={(value) =>
+                            handleQuantity(
+                              index,
+                              value,
+                              value >= 1 &&
+                                value <= purchase.product.quantity &&
+                                value !==
+                                  (purchasesInCart as Purchase[])[index]
+                                    .buy_count
+                            )
+                          }
                         />
                       </div>
                       <div className='col-span-1'>
