@@ -9,17 +9,19 @@ import { formatCurrency, generateNameId } from 'src/utils/utils'
 import { Purchase } from 'src/types/purchase.type'
 
 import produce from 'immer'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { keyBy } from 'lodash'
 import { toast } from 'react-toastify'
+import { AppContext } from 'src/context/App.context'
 interface ExtendedPurchase extends Purchase {
   disabled: boolean
   checked: boolean
 }
 export default function Cart() {
-  const [extendedPurchases, setExtendedPurchases] = useState<
-    ExtendedPurchase[]
-  >([])
+  // const [extendedPurchases, setExtendedPurchases] = useState<
+  //   ExtendedPurchase[]
+  //   >([])
+  const { extendedPurchases, setExtendedPurchases } = useContext(AppContext)
   const { data: purchasesInCartData, refetch } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
