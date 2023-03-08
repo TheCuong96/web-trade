@@ -61,10 +61,8 @@ export default function ProductDetail() {
     enabled: Boolean(product) // khi nào product khác null hoặc undefined thì mới gọi api
   })
   const addToCartMutation = useMutation(purchaseApi.addToCart)
-  console.log(productsData)
 
   const next = () => {
-    console.log(currentIndexImages[1])
     if (currentIndexImages[1] < (product as ProductType).images.length) {
       setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
     }

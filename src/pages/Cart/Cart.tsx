@@ -84,11 +84,8 @@ export default function Cart() {
     enable: boolean
   ) => {
     // mỗi lần update số lượng thì gọi api cho nó luôn
-    console.log('enable', enable)
 
     if (enable) {
-      console.log('tại sao ', enable, 'mà vẫn chạy vô đây')
-
       const purchase = extendedPurchases[purchaseIndex]
       setExtendedPurchases(
         produce((draft) => {

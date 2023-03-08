@@ -41,7 +41,6 @@ const removeSpecialCharacter = (str: string) =>
   )
 
 export const generateNameId = ({ name, id }: { name: string; id: string }) => {
-  console.log('xxx', removeSpecialCharacter(name))
   /** thay đổi những khoảng trống thành dấu '-' và ở đoạn cuối cùng gắn thêm -id- và biến {id} */
   return removeSpecialCharacter(name).replace(/\s/g, '-') + `-id-${id}`
 }

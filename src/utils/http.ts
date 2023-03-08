@@ -38,7 +38,6 @@ class Http {
     )
     // Add a response interceptor
     this.instance.interceptors.response.use((response) => {
-      console.log('response', response)
       // khi đăng nhập hoặc đăng ký thành công thì api trả về cho ta access_token và url, lấy url ra để kiểm tra xem là gì, nếu là login hoặc register thì set access_token vào localStorage và accessToken ở
       const { url } = response.config
       if (url === path.login || url === path.register) {

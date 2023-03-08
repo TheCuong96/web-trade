@@ -33,8 +33,6 @@ export default function ProductList() {
     staleTime: 3 * 60 * 1000
   })
 
-  console.log(productsData)
-  console.log('categoriesData', categoriesData)
 
   return (
     <div className='bg-gray-200 py-6'>

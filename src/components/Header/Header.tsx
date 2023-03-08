@@ -62,7 +62,6 @@ export default function Header() {
   const handleLogout = () => {
     logoutMutation.mutate()
   }
-  console.log('queryConfig.order', queryConfig.order)
 
   const onSubmitSearch = handleSubmit((data) => {
     const config = queryConfig.order

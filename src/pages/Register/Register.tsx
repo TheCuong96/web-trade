@@ -77,7 +77,6 @@ export default function Register() {
   })
 
   const value = watch()
-  console.log(value)
 
   return (
     <div className='bg-skyblue'>
