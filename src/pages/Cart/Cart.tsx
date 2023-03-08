@@ -18,10 +18,9 @@ interface ExtendedPurchase extends Purchase {
   checked: boolean
 }
 export default function Cart() {
-  // const [extendedPurchases, setExtendedPurchases] = useState<
-  //   ExtendedPurchase[]
-  //   >([])
-  const { extendedPurchases, setExtendedPurchases } = useContext(AppContext)
+  const [extendedPurchases, setExtendedPurchases] = useState<
+    ExtendedPurchase[]
+  >([])
   const { data: purchasesInCartData, refetch } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
