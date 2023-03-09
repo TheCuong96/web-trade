@@ -68,7 +68,7 @@ export default function UserSideNav() {
           Đổi mật khẩu
         </Link>
         <Link
-          to={path.hitoryPurchase}
+          to={path.historyPurchase}
           className='mt-4 flex items-center capitalize text-gray-600 transition-colors'
         >
           <div className='mr-3 h-[22px] w-[22px]'>
