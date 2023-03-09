@@ -43,7 +43,7 @@ export default function UserSideNav() {
       <div className='mt-7'>
         <Link
           to={path.profile}
-          className='text-orange flex items-center capitalize transition-colors'
+          className='flex items-center capitalize text-skyblue transition-colors'
         >
           <div className='mr-3 h-[22px] w-[22px]'>
             <img
