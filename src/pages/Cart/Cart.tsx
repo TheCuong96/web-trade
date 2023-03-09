@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import purchaseApi from 'src/apis/purchase.api'
 import Button from 'src/components/Button'
 import QuantityController from 'src/components/QuantityController'
@@ -9,44 +9,50 @@ import { formatCurrency, generateNameId } from 'src/utils/utils'
 import { Purchase } from 'src/types/purchase.type'
 
 import produce from 'immer'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { keyBy } from 'lodash'
 import { toast } from 'react-toastify'
 import { AppContext } from 'src/context/App.context'
-interface ExtendedPurchase extends Purchase {
-  disabled: boolean
-  checked: boolean
-}
+import noproduct from 'src/assets/no-product.png'
+
 export default function Cart() {
-  const [extendedPurchases, setExtendedPurchases] = useState<
-    ExtendedPurchase[]
-  >([])
+  const { extendedPurchases, setExtendedPurchases } = useContext(AppContext)
   const { data: purchasesInCartData, refetch } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
   })
 
-  const isAllChecked = extendedPurchases.every((purchase) => purchase.checked)
+  const location = useLocation()
+  const choosenPurchaseIdFromLocation = (
+    location.state as { purchaseId: string } | null
+  )?.purchaseId
   const purchasesInCart = purchasesInCartData?.data.data
-  const checkedPurchases = extendedPurchases.filter(
-    (purchase) => purchase.checked
+  const isAllChecked = useMemo(
+    () => extendedPurchases.every((purchase) => purchase.checked),
+    [extendedPurchases]
+  )
+  const checkedPurchases = useMemo(
+    () => extendedPurchases.filter((purchase) => purchase.checked),
+    [extendedPurchases]
   )
   const checkedPurchasesCount = checkedPurchases.length
-  const totalCheckedPurchasePrice = checkedPurchases.reduce(
-    (result, current) => {
-      return result + current.product.price * current.buy_count
-    },
-    0
+  const totalCheckedPurchasePrice = useMemo(
+    () =>
+      checkedPurchases.reduce((result, current) => {
+        return result + current.product.price * current.buy_count
+      }, 0),
+    [checkedPurchases]
   )
-  const totalCheckedPurchaseSavingPrice = checkedPurchases.reduce(
-    (result, current) => {
-      return (
-        result +
-        (current.product.price_before_discount - current.product.price) *
-          current.buy_count
-      )
-    },
-    0
+  const totalCheckedPurchaseSavingPrice = useMemo(
+    () =>
+      checkedPurchases.reduce((result, current) => {
+        return (
+          result +
+          (current.product.price_before_discount - current.product.price) *
+            current.buy_count
+        )
+      }, 0),
+    [checkedPurchases]
   )
 
   const updatePurchaseMutation = useMutation({
@@ -77,14 +83,26 @@ export default function Cart() {
     setExtendedPurchases((prev) => {
       const extendedPurchasesObject = keyBy(prev, '_id') // dùng keyBy của lodash để clone hết data của giỏ hàng của mình gắn cho id của chính nó, đại khái là lưu ra 1 bản sao chép để giữ lại giá trị checked và sử dụng nó
       return (
-        purchasesInCart?.map((purchase) => ({
-          ...purchase,
-          disabled: false,
-          checked: Boolean(extendedPurchasesObject[purchase._id]?.checked)
-        })) || []
+        purchasesInCart?.map((purchase) => {
+          const isChoosenPurchaseFromLocation =
+            choosenPurchaseIdFromLocation === purchase._id
+          return {
+            ...purchase,
+            disabled: false,
+            checked:
+              isChoosenPurchaseFromLocation ||
+              Boolean(extendedPurchasesObject[purchase._id]?.checked)
+          }
+        }) || []
       )
     })
-  }, [purchasesInCart])
+  }, [purchasesInCart, choosenPurchaseIdFromLocation])
+
+  useEffect(() => {
+    return () => {
+      history.replaceState(null, '')
+    }
+  }, [])
 
   // const handleCheck =
   //   (productIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {

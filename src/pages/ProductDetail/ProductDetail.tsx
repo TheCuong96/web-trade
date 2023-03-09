@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import InputNumber from 'src/components/InputNumber'
 import ProductRating from 'src/components/ProductRating'
@@ -21,6 +21,7 @@ import purchaseApi from 'src/apis/purchase.api'
 import { purchasesStatus } from 'src/constants/purchase'
 import { toast } from 'react-toastify'
 import { queryClient } from 'src/main'
+import path from 'src/constants/path'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
@@ -34,7 +35,7 @@ export default function ProductDetail() {
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [activeImage, setActiveImage] = useState('')
   const product = productDetailData?.data.data
-
+  const navigate = useNavigate()
   const currentImages = useMemo(
     () => (product ? product.images.slice(...currentIndexImages) : []),
     [product, currentIndexImages]
@@ -118,6 +119,19 @@ export default function ProductDetail() {
       }
     )
   }
+  const buyNow = async () => {
+    const res = await addToCartMutation.mutateAsync({
+      buy_count: buyCount,
+      product_id: product?._id as string
+    })
+    const purchase = res.data.data
+    navigate(path.cart, {
+      state: {
+        purchaseId: purchase._id
+      }
+    })
+  }
+
   if (!product) return null
   return (
     <div className='bg-gray-200 py-6'>
@@ -286,7 +300,10 @@ export default function ProductDetail() {
                   </svg>
                   Thêm vào giỏ hàng
                 </button>
-                <button className='fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-skyblue px-5 capitalize text-white shadow-sm outline-none hover:bg-skyblue/90'>
+                <button
+                  onClick={buyNow}
+                  className='fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-skyblue px-5 capitalize text-white shadow-sm outline-none hover:bg-skyblue/90'
+                >
                   Mua ngay
                 </button>
               </div>

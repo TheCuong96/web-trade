@@ -12,11 +12,13 @@ import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
 import CartLayout from './layouts/CartLayout'
 export default function useRouterElements() {
-  const { isAuthenticated } = useContext(AppContext)
+  
   const ProtectedRoute = () => {
+    const { isAuthenticated } = useContext(AppContext)
     return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
   }
   const RejectedRoute = () => {
+    const { isAuthenticated } = useContext(AppContext)
     return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
   }
   const routesElement = useRoutes([
