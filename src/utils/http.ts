@@ -37,20 +37,21 @@ class Http {
       }
     )
     // Add a response interceptor
-    this.instance.interceptors.response.use((response) => {
-      // khi đăng nhập hoặc đăng ký thành công thì api trả về cho ta access_token và url, lấy url ra để kiểm tra xem là gì, nếu là login hoặc register thì set access_token vào localStorage và accessToken ở
-      const { url } = response.config
-      if (url === path.login || url === path.register) {
-        const data = response.data as AuthResponse
-        this.accessToken = data.data.access_token // vì ở trên ta tạo ra accessToken nên ta lưu vào đây trước
-        setAccessTokenToLS(this.accessToken)
-        setProfileToLS(data.data.user)
-      } else if (url === path.logout) {
-        this.accessToken = ''
-        clearLS()
-      }
-      return response
-    }),
+    this.instance.interceptors.response.use(
+      (response) => {
+        // khi đăng nhập hoặc đăng ký thành công thì api trả về cho ta access_token và url, lấy url ra để kiểm tra xem là gì, nếu là login hoặc register thì set access_token vào localStorage và accessToken ở
+        const { url } = response.config
+        if (url === path.login || url === path.register) {
+          const data = response.data as AuthResponse
+          this.accessToken = data.data.access_token // vì ở trên ta tạo ra accessToken nên ta lưu vào đây trước
+          setAccessTokenToLS(this.accessToken)
+          setProfileToLS(data.data.user)
+        } else if (url === path.logout) {
+          this.accessToken = ''
+          clearLS()
+        }
+        return response
+      },
       function (error: AxiosError) {
         if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,8 +59,13 @@ class Http {
           const message = data.message || error.message
           toast.error(message)
         }
+        if (error.response?.status === HttpStatusCode.Unauthorized) {
+          clearLS()
+          // window.location.reload() // nếu sử dụng cách reload lại page thì mất đi tính năng single page của nó
+        }
         return Promise.reject(error)
       }
+    )
   }
 }
 

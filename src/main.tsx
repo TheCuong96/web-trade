@@ -10,7 +10,8 @@ import { AppProvider } from './context/App.context'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      retry: 0 // khi gọi api bị thất bại thì sẽ không gọi lại nữa, mặc định nó sẽ gọi lại 3 lần
     }
   }
 })
