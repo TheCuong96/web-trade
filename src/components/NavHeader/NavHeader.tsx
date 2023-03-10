@@ -5,6 +5,7 @@ import authApi from 'src/apis/auth.api'
 import path from 'src/constants/path'
 import { purchasesStatus } from 'src/constants/purchase'
 import Popover from '../Popover'
+import userImage from 'src/assets/user.svg'
 import { AppContext } from 'src/context/App.context'
 
 export default function NavHeader() {
@@ -25,7 +26,7 @@ export default function NavHeader() {
   const handleLogout = () => {
     logoutMutation.mutate()
   }
-
+  console.log(profile)
   return (
     <div className='flex justify-end'>
       <Popover
@@ -85,7 +86,7 @@ export default function NavHeader() {
                 Tài khoản của tôi
               </Link>
               <Link
-                to={path.cart}
+                to='/'
                 className='block w-full bg-white py-3 px-4 text-left hover:bg-slate-100 hover:text-cyan-500'
               >
                 Đơn mua
@@ -101,7 +102,7 @@ export default function NavHeader() {
         >
           <div className='mr-2 h-6 w-6 flex-shrink-0'>
             <img
-              src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
+              src={profile?.avatar || userImage}
               alt='avatar'
               className='h-full w-full rounded-full object-cover'
             />

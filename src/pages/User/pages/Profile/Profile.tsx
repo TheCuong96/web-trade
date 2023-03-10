@@ -1,11 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import userApi from 'src/apis/user.api'
 import Button from 'src/components/Button'
 import Input from 'src/components/Input'
 import InputNumber from 'src/components/InputNumber'
+import { AppContext } from 'src/context/App.context'
+import { setProfileToLS } from 'src/utils/auth'
 import { userSchema, UserSchema } from 'src/utils/rules'
 import DateSelect from '../../Components/DateSelect'
 
@@ -23,7 +26,8 @@ const profileSchema = userSchema.pick([
 ])
 
 export default function Profile() {
-  const { data: profileData } = useQuery({
+  const { setProfile } = useContext(AppContext)
+  const { data: profileData, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: userApi.getProfile
   })
@@ -65,7 +69,14 @@ export default function Profile() {
 
   const onSubmit = handleSubmit(async (data) => {
     console.log(data)
-    // await updateProfileMutation.mutateAsync({})
+    const res = await updateProfileMutation.mutateAsync({
+      ...data,
+      date_of_birth: data.date_of_birth?.toISOString()
+    })
+    setProfile(res.data.data)
+    setProfileToLS(res.data.data)
+    refetch()
+    toast.success(res.data.message)
   })
 
   const value = watch()
@@ -158,7 +169,7 @@ export default function Profile() {
             <div className='truncate pt-3 capitalize sm:w-[20%] sm:text-right' />
             <div className='sm:w-[80%] sm:pl-5'>
               <Button
-                className='flex h-9 items-center bg-skyblue px-5 text-center text-sm text-white hover:bg-skyblue/80'
+                className='flex h-9 items-center rounded-sm bg-skyblue px-5 text-center text-sm text-white hover:bg-skyblue/80'
                 type='submit'
               >
                 Lưu
