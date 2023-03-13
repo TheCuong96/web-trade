@@ -10,6 +10,7 @@ import {
 import { error } from 'console'
 import path from 'src/constants/path'
 import { AuthResponse } from 'src/types/auth.type'
+import config from 'src/constants/config'
 
 class Http {
   instance: AxiosInstance
@@ -17,7 +18,7 @@ class Http {
   constructor() {
     this.accessToken = getAccessTokenFromLS() // lấy access_token từ localStorage để lưu vào biến ở đây, câu hỏi là tại sao làm vậy, làm vậy vì this.accessToken là lưu trên ram còn getAccessTokenToLS() là lưu trên ổ cứng của ta, nên mỗi khi ta reload lại page hay cần dùng tới accessToken thì ta chỉ cần lấy trong class từ ra ram ra thì nó sẽ nhanh hơn lấy từ ổ cứng rất nhiều
     this.instance = axios.create({
-      baseURL: 'https://api-ecom.duthanhduoc.com/',
+      baseURL: config.baseUrl,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'
@@ -56,7 +57,7 @@ class Http {
         if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const data: any | undefined = error.response?.data
-          const message = data.message || error.message
+          const message = data?.message || error.message
           toast.error(message)
         }
         if (error.response?.status === HttpStatusCode.Unauthorized) {

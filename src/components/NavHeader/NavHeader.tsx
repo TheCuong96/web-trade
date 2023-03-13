@@ -7,6 +7,7 @@ import { purchasesStatus } from 'src/constants/purchase'
 import Popover from '../Popover'
 import userImage from 'src/assets/user.svg'
 import { AppContext } from 'src/context/App.context'
+import { getAvatarUrl } from 'src/utils/utils'
 
 export default function NavHeader() {
   const { setIsAuthenticated, isAuthenticated, setProfile, profile } =
@@ -102,7 +103,7 @@ export default function NavHeader() {
         >
           <div className='mr-2 h-6 w-6 flex-shrink-0'>
             <img
-              src={profile?.avatar || userImage}
+              src={getAvatarUrl(profile?.avatar)}
               alt='avatar'
               className='h-full w-full rounded-full object-cover'
             />
