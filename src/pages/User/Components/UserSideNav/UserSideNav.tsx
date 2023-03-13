@@ -1,9 +1,10 @@
 import { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import path from 'src/constants/path'
 import userImage from 'src/assets/user.svg'
 import { AppContext } from 'src/context/App.context'
 import { getAvatarUrl } from 'src/utils/utils'
+import classNames from 'classnames'
 export default function UserSideNav() {
   const { profile } = useContext(AppContext)
 
@@ -46,9 +47,14 @@ export default function UserSideNav() {
         </div>
       </div>
       <div className='mt-7'>
-        <Link
+        <NavLink
           to={path.profile}
-          className='flex items-center capitalize text-skyblue transition-colors'
+          className={({ isActive }) =>
+            classNames('flex items-center capitalize  transition-colors', {
+              'text-skyblue': isActive,
+              'text-gray-600': !isActive
+            })
+          }
         >
           <div className='mr-3 h-[22px] w-[22px]'>
             <img
@@ -58,10 +64,15 @@ export default function UserSideNav() {
             />
           </div>
           Tài khoản của tôi
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to={path.changePassword}
-          className='mt-4 flex items-center capitalize text-gray-600 transition-colors'
+          className={({ isActive }) =>
+            classNames('mt-4 flex items-center capitalize transition-colors', {
+              'text-skyblue': isActive,
+              'text-gray-600': !isActive
+            })
+          }
         >
           <div className='mr-3 h-[22px] w-[22px]'>
             <img
@@ -71,10 +82,15 @@ export default function UserSideNav() {
             />
           </div>
           Đổi mật khẩu
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to={path.historyPurchase}
-          className='mt-4 flex items-center capitalize text-gray-600 transition-colors'
+          className={({ isActive }) =>
+            classNames('mt-4 flex items-center  capitalize transition-colors', {
+              'text-skyblue': isActive,
+              'text-gray-600': !isActive
+            })
+          }
         >
           <div className='mr-3 h-[22px] w-[22px]'>
             <img
@@ -84,7 +100,7 @@ export default function UserSideNav() {
             />
           </div>
           Đơn mua
-        </Link>
+        </NavLink>
       </div>
     </div>
   )
