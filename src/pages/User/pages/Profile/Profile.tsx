@@ -13,6 +13,7 @@ import { userSchema, UserSchema } from 'src/utils/rules'
 import DateSelect from '../../Components/DateSelect'
 import { getAvatarUrl, isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponse } from 'src/types/utils.type'
+import config from 'src/constants/config'
 
 type FormData = Pick<
   UserSchema,
@@ -124,7 +125,18 @@ export default function Profile() {
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileFromLocal = event.target.files?.[0]
-    setFile(fileFromLocal)
+    fileInputRef.current?.setAttribute('value', '')
+    if (
+      fileFromLocal &&
+      (fileFromLocal.size >= config.maxSizeUploadAvatar ||
+        !fileFromLocal.type.includes('image'))
+    ) {
+      toast.error(`Dụng lượng file tối đa 1 MB. Định dạng:.JPEG, .PNG`, {
+        position: 'top-center'
+      })
+    } else {
+      setFile(fileFromLocal)
+    }
   }
 
   const handleUpload = () => {
@@ -240,6 +252,10 @@ export default function Profile() {
               accept='.jpg,.jpeg,.png'
               ref={fileInputRef}
               onChange={onFileChange}
+              onClick={(event) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ;(event.target as any).value = null // set như vậy để ngăn chặn việc chọn cùng 1 tấm ảnh quá kích thước nhưng không show ra thông báo ở lần chọn thứ 2 trở lên
+              }}
             />
             <button
               className='flex h-10 items-center justify-end rounded-sm border bg-white px-6 text-sm text-gray-600 shadow-sm'
