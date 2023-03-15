@@ -14,6 +14,7 @@ import UserLayout from './pages/User/Components/UserLayout'
 import ChangePassword from './pages/User/pages/ChangePassword'
 import Profile from './pages/User/pages/Profile'
 import HistoryPurchase from './pages/User/pages/HistoryPurchase'
+import NotFound from './pages/NotFound'
 export default function useRouterElements() {
   const ProtectedRoute = () => {
     const { isAuthenticated } = useContext(AppContext)
@@ -107,6 +108,14 @@ export default function useRouterElements() {
           )
         }
       ]
+    },
+    {
+      path: '*',
+      element: (
+        <MainLayout>
+          <NotFound />
+        </MainLayout>
+      )
     }
   ])
 
