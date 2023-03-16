@@ -29,16 +29,16 @@ const NotFound = lazy(() => import('./pages/NotFound'))
 // lazy của react, để xử lý việc dùng component đến đâu thì nó mới tải js đến đó, chứ không tải trước, nên cân nhắc mỗi khi dùng
 // Suspense của react là để bao bọc component có sử dụng lazy lại, trong Suspense có attribute là fallback dùng để show ra cái gì đó khi component chưa tải xong
 
-export default function useRouterElements() {
-  const ProtectedRoute = () => {
-    const { isAuthenticated } = useContext(AppContext)
-    return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
-  }
-  const RejectedRoute = () => {
-    const { isAuthenticated } = useContext(AppContext)
-    return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
-  }
+const ProtectedRoute = () => {
+  const { isAuthenticated } = useContext(AppContext)
+  return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
+}
+const RejectedRoute = () => {
+  const { isAuthenticated } = useContext(AppContext)
+  return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
+}
 
+export default function useRouterElements() {
   const routesElement = useRoutes([
     {
       path: '',
