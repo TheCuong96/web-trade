@@ -319,3 +319,4 @@ Các bạn thêm đoạn code này vào `settings.json` của VS Code
 [dùng để ngăn chặn tấn công bằng xss bằng html](https://www.npmjs.com/package/dompurify)
 
 [dùng để xem những thư viện đang sài đã chiếm dung lượng của ta bao nhiêu khi build](https://www.npmjs.com/package/rollup-plugin-visualizer)
+[dùng để sử dụng đa ngôn ngữ cho reactjs](https://react.i18next.com/getting-started)

@@ -21,11 +21,13 @@
     "classnames": "^2.3.2",
     "dompurify": "^3.0.1",
     "framer-motion": "^10.0.1",
+    "i18next": "^22.4.12",
     "immer": "^9.0.19",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.2",
+    "react-i18next": "^12.2.0",
     "react-router-dom": "^6.8.1",
     "react-toastify": "^9.1.1",
     "yup": "^0.32.11"
