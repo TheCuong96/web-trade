@@ -298,10 +298,7 @@ Code xóa các ký tự đặc biệt trên bàn phím
 ```ts
 export const removeSpecialCharacter = (str: string) =>
   // eslint-disable-next-line no-useless-escape
-  str.replace(
-    /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g,
-    ''
-  )
+  str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, '')
 ```
 
 Sữa lỗi Tailwindcss Extension không gợi ý class
@@ -320,3 +317,5 @@ Các bạn thêm đoạn code này vào `settings.json` của VS Code
 [https://floating-ui.com/docs/react]
 [https://www.framer.com/motion/introduction/]
 [dùng để ngăn chặn tấn công bằng xss bằng html](https://www.npmjs.com/package/dompurify)
+
+[dùng để xem những thư viện đang sài đã chiếm dung lượng của ta bao nhiêu khi build](https://www.npmjs.com/package/rollup-plugin-visualizer)

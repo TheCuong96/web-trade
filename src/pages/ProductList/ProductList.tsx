@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { omitBy, isUndefined } from 'lodash'
+import isUndefined from 'lodash/isUndefined'
+import omitBy from 'lodash/omitBy'
 import productApi from 'src/apis/product.api'
 import Pagination from 'src/components/Pagination'
 import useQueryParams from 'src/hooks/useQueryParams'
@@ -32,7 +33,6 @@ export default function ProductList() {
     keepPreviousData: true,
     staleTime: 3 * 60 * 1000
   })
-
 
   return (
     <div className='bg-gray-200 py-6'>

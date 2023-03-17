@@ -10,7 +10,7 @@ import { Purchase } from 'src/types/purchase.type'
 
 import produce from 'immer'
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { keyBy } from 'lodash'
+import keyBy from 'lodash/keyBy'
 import { toast } from 'react-toastify'
 import { AppContext } from 'src/context/App.context'
 import noproduct from 'src/assets/no-product.png'
