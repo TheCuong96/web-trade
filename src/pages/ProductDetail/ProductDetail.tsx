@@ -22,6 +22,8 @@ import { purchasesStatus } from 'src/constants/purchase'
 import { toast } from 'react-toastify'
 import path from 'src/constants/path'
 import { useTranslation } from 'react-i18next'
+import { Helmet } from 'react-helmet-async'
+import { convert } from 'html-to-text'
 
 export default function ProductDetail() {
   const { t } = useTranslation(['product'])
@@ -138,6 +140,11 @@ export default function ProductDetail() {
   if (!product) return null
   return (
     <div className='bg-gray-200 py-6'>
+      <Helmet>
+        {/* Ở đây thì đã có sẵn description nên ta dùng description luôn, và description này trả về html nên ta cần convert nó lại để chỉ lấy content từ nó */}
+        <title>{product.name} | Shopee Clone</title>
+        <meta name='description' content={convert(product.description)} />
+      </Helmet>
       <div className='container'>
         <div className='bg-white p-4 shadow'>
           <div className='grid grid-cols-12 gap-9'>

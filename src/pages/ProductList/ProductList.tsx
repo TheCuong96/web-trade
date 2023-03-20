@@ -10,6 +10,7 @@ import Product from './components/Product'
 import SortProductList from './components/SortProductList'
 import AsideFilter from './components/AsideFilter'
 import useQueryConfig from 'src/hooks/useQueryConfig'
+import { Helmet } from 'react-helmet-async'
 
 export type QueryConfig = {
   [key in keyof ProductListConfig]: string
@@ -36,6 +37,10 @@ export default function ProductList() {
 
   return (
     <div className='bg-gray-200 py-6'>
+       <Helmet>
+        <title>Sản Phẩm | web trade</title>
+        <meta name='description' content='VẬT PHẨM, SẢN PHẨM, web bán hàng, trade, mua đồ, bán đồ, đồ dùng, mua sắm, hao tiền, tốn tiền >><< [ghi những thứ người ta có thể search gg tìm kiếm về trang web của chúng ta, ở đây là 1 trang web bán hàng]' />
+      </Helmet>
       <div className='container'>
         {productsData && (
           <div className='grid grid-cols-12 gap-6'>

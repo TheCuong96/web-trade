@@ -12,6 +12,7 @@ import { useContext } from 'react'
 import { AppContext } from 'src/context/App.context'
 import { toast } from 'react-toastify'
 import Button from 'src/components/Button'
+import { Helmet } from 'react-helmet-async'
 
 // type FormData = Schema
 
@@ -80,6 +81,10 @@ export default function Register() {
 
   return (
     <div className='bg-skyblue'>
+       <Helmet>
+        <title>Đăng Ký | web trade</title>
+        <meta name='description' content='ĐĂNG KÝ, web bán hàng, trade, mua đồ, bán đồ, đồ dùng, mua sắm, hao tiền, tốn tiền >><< [ghi những thứ người ta có thể search gg tìm kiếm về trang web của chúng ta, ở đây là 1 trang web bán hàng]' />
+      </Helmet>
       <div className='container'>
         <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>
