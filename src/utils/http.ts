@@ -30,7 +30,7 @@ import { ErrorResponse } from 'src/types/utils.type'
 // Refresh Token mới cho me: 5 - 6
 // Gọi lại Me: 6
 
-class Http {
+export class Http {
   instance: AxiosInstance
   private accessToken: string // ta tạo 1 biến accessToken trong class trước
   private refreshToken: string
