@@ -3,7 +3,8 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import matchers from '@testing-library/jest-dom/matchers'
 import App from './App'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, MemoryRouter } from 'react-router-dom'
+import { logScreen } from './utils/testutils'
 
 expect.extend(matchers)
 
@@ -38,6 +39,18 @@ describe('App', () => {
         'Đăng nhập | web trade'
       )
     })
-    screen.debug(document.body.parentElement as HTMLElement, 99999999) // dùng để nó in ra những gì mà nó đã render cho ta xem, có thể hiểu nó như consolog
+  })
+
+  test('Về trang not found', async () => {
+    const badRoute = '/some/bad/route'
+    render(
+      <MemoryRouter initialEntries={[badRoute]}>
+        <App />
+      </MemoryRouter>
+    )
+    await waitFor(() => {
+      expect(screen.getByText(/Page Not Found/i)).toBeInTheDocument()
+    })
+    // await logScreen() // dùng để nó in ra những gì mà nó đã render cho ta xem, có thể hiểu nó như consolog
   })
 })
