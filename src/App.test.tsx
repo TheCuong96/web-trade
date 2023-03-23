@@ -56,11 +56,15 @@ describe('App', () => {
   })
 
   test('Render trang register', async () => {
-    render(
-      <MemoryRouter initialEntries={[path.register]}>
-        <App />
-      </MemoryRouter>
-    )
+    window.history.pushState({}, 'Test Page', path.register)
+    render(<App />, {
+      wrapper: BrowserRouter
+    })
+    // render(
+    //   <MemoryRouter initialEntries={[path.register]}>
+    //     <App />
+    //   </MemoryRouter>
+    // )
     await waitFor(() => {
       expect(screen.getByText(/Bạn đã có tài khoản?/i)).toBeInTheDocument()
     })
