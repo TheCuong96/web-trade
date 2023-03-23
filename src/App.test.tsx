@@ -5,6 +5,7 @@ import matchers from '@testing-library/jest-dom/matchers'
 import App from './App'
 import { BrowserRouter, MemoryRouter } from 'react-router-dom'
 import { logScreen } from './utils/testutils'
+import path from './constants/path'
 
 expect.extend(matchers)
 
@@ -40,7 +41,6 @@ describe('App', () => {
       )
     })
   })
-
   test('Về trang not found', async () => {
     const badRoute = '/some/bad/route'
     render(
@@ -51,6 +51,18 @@ describe('App', () => {
     await waitFor(() => {
       expect(screen.getByText(/Page Not Found/i)).toBeInTheDocument()
     })
+
     // await logScreen() // dùng để nó in ra những gì mà nó đã render cho ta xem, có thể hiểu nó như consolog
+  })
+
+  test('Render trang register', async () => {
+    render(
+      <MemoryRouter initialEntries={[path.register]}>
+        <App />
+      </MemoryRouter>
+    )
+    await waitFor(() => {
+      expect(screen.getByText(/Bạn đã có tài khoản?/i)).toBeInTheDocument()
+    })
   })
 })
