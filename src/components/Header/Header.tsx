@@ -12,6 +12,7 @@ import { formatCurrency } from 'src/utils/utils'
 import noproduct from 'src/assets/no-product.png'
 import useSearchProducts from 'src/hooks/useSearchProducts'
 import NavHeader from '../NavHeader'
+import Loading from '../Loading'
 
 type FormData = Pick<Schema, 'name'>
 
@@ -24,7 +25,7 @@ export default function Header() {
   // Chứ không bị unmount - mounting again
   // (Tất nhiên là trừ trường hợp logout rồi nhảy sang RegisterLayout rồi nhảy vào lại)
   // Nên các query này sẽ không bị inactive => Không bị gọi lại => không cần thiết phải set stale: Infinity
-  const { data: purchasesInCartData } = useQuery({
+  const { data: purchasesInCartData, isLoading } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart }),
     enabled: isAuthenticated // khi đã logout ra thì sẽ không gọi api cảu cart nữa
@@ -72,66 +73,74 @@ export default function Header() {
           <div className='col-span-1 justify-self-end'>
             <Popover
               renderPopover={
-                <div className='relative  max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
-                  {purchasesInCart && purchasesInCart.length > 0 ? (
-                    <div className='p-2'>
-                      <div className='capitalize text-gray-400'>
-                        Sản phẩm mới thêm
-                      </div>
-                      <div className='mt-5'>
-                        {purchasesInCart
-                          .slice(0, MAX_PURCHASES)
-                          .map((purchase) => (
-                            <div
-                              className='mt-2 flex py-2 hover:bg-gray-100'
-                              key={purchase._id}
-                            >
-                              <div className='flex-shrink-0'>
-                                <img
-                                  src={purchase.product.image}
-                                  alt={purchase.product.name}
-                                  className='h-11 w-11 object-cover'
-                                />
-                              </div>
-                              <div className='ml-2 flex-grow overflow-hidden'>
-                                <div className='truncate'>
-                                  {purchase.product.name}
-                                </div>
-                              </div>
-                              <div className='ml-2 flex-shrink-0'>
-                                <span className='text-skyblue'>
-                                  ₫{formatCurrency(purchase.product.price)}
-                                </span>
-                              </div>
-                            </div>
-                          ))}
-                      </div>
-                      <div className='mt-6 flex items-center justify-between'>
-                        <div className='text-xs capitalize text-gray-500'>
-                          {purchasesInCart.length > MAX_PURCHASES
-                            ? purchasesInCart.length - MAX_PURCHASES
-                            : ''}{' '}
-                          Thêm hàng vào giỏ
-                        </div>
-                        <Link
-                          to={path.cart}
-                          className='rounded-sm bg-skyblue px-4 py-2 capitalize text-white hover:bg-opacity-90'
-                        >
-                          Xem giỏ hàng
-                        </Link>
-                      </div>
-                    </div>
+                <>
+                  {isLoading ? (
+                    <Loading />
                   ) : (
-                    <div className='flex h-[300px] w-[300px] items-center justify-center p-2'>
-                      <img
-                        src={noproduct}
-                        alt='no purchase'
-                        className='h-24 w-24'
-                      />
-                      <div className='mt-3 capitalize'>Chưa có sản phẩm</div>
+                    <div className='relative  max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
+                      {purchasesInCart && purchasesInCart.length > 0 ? (
+                        <div className='p-2'>
+                          <div className='capitalize text-gray-400'>
+                            Sản phẩm mới thêm
+                          </div>
+                          <div className='mt-5'>
+                            {purchasesInCart
+                              .slice(0, MAX_PURCHASES)
+                              .map((purchase) => (
+                                <div
+                                  className='mt-2 flex py-2 hover:bg-gray-100'
+                                  key={purchase._id}
+                                >
+                                  <div className='flex-shrink-0'>
+                                    <img
+                                      src={purchase.product.image}
+                                      alt={purchase.product.name}
+                                      className='h-11 w-11 object-cover'
+                                    />
+                                  </div>
+                                  <div className='ml-2 flex-grow overflow-hidden'>
+                                    <div className='truncate'>
+                                      {purchase.product.name}
+                                    </div>
+                                  </div>
+                                  <div className='ml-2 flex-shrink-0'>
+                                    <span className='text-skyblue'>
+                                      ₫{formatCurrency(purchase.product.price)}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                          </div>
+                          <div className='mt-6 flex items-center justify-between'>
+                            <div className='text-xs capitalize text-gray-500'>
+                              {purchasesInCart.length > MAX_PURCHASES
+                                ? purchasesInCart.length - MAX_PURCHASES
+                                : ''}{' '}
+                              Thêm hàng vào giỏ
+                            </div>
+                            <Link
+                              to={path.cart}
+                              className='rounded-sm bg-skyblue px-4 py-2 capitalize text-white hover:bg-opacity-90'
+                            >
+                              Xem giỏ hàng
+                            </Link>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className='flex h-[300px] w-[300px] items-center justify-center p-2'>
+                          <img
+                            src={noproduct}
+                            alt='no purchase'
+                            className='h-24 w-24'
+                          />
+                          <div className='mt-3 capitalize'>
+                            Chưa có sản phẩm
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
-                </div>
+                </>
               }
             >
               <Link to={path.cart} className='relative'>
